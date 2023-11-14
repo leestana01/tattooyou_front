@@ -72,7 +72,6 @@ const UploadButtonSection = styled.div`
     justify-content: space-between;
 `
 
-// 컴포넌트 메인 함수
 export default function Component() {
   const navigate = useNavigate();
   const goto = where => {
