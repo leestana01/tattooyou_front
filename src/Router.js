@@ -1,8 +1,10 @@
 import React from "react";
 import { createBrowserRouter} from "react-router-dom";
-import Main from "./Main";
-import ScreenContainer from "./Pages/ScreenContainer";
-import Login from "./Components/Login/Login";
+import Main from "./Pages/Main";
+import Login from "./Components/MainPage/Login";
+import Menus from "./Components/MainPage/Menus";
+import MyPage from "./Components/MainPage/MyPage";
+import Contest from "./Components/MainPage/Contest"
 
 const router = createBrowserRouter([
     {
@@ -11,7 +13,19 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "",
-                element: <ScreenContainer element={<Login/>}/>,
+                element: <Login/>
+            },
+            {
+                path: "/menus",
+                element: <Menus/>
+            },
+            {
+                path: "/mypage",
+                element:<MyPage />
+            },
+            {
+                path: "/contest",
+                element:<Contest/>
             }
         ]
     }

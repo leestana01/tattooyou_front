@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-const InputStyled = styled.input`
+export default styled.input`
     background: #e2e8f0;
     border-radius: 9999px;
     padding: 0.5rem 1rem;
@@ -11,5 +11,3 @@ const InputStyled = styled.input`
         ring-color: #f59e0b;
     }
 `;
-
-export default InputStyled;
