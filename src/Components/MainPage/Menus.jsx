@@ -7,16 +7,17 @@ import { useNavigate } from 'react-router-dom';
 import BackButton from '../Common/BackButton';
 
 const ImageGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 `;
 
 const RoundImage = styled.img`
   border-radius: full;
   aspect-ratio: 1 / 1;
   object-fit: cover;
+  width="128";
+  height="128";
 `;
 
 const InfoBox = styled.div`
@@ -54,23 +55,21 @@ export default function Component() {
         <RoundImage
           alt="Lion Image"
           src="/likelion.png"
-          width="128"
-          height="128"
         />
         <InfoBox>
             <p>Welcome.</p>
-            <p>We always TATOo YOu...</p>
+            <p>We always TATTOo YOu...</p>
         </InfoBox>
       </ImageGrid>
       <OptionsContainer>
         <OptionBox>
-          <ButtonStyled variant="outline">Real AR Tattoo</ButtonStyled>
+          <ButtonStyled variant="outline" onClick={() => goto("/camera")}>Real AR Tattoo</ButtonStyled>
           <Description size="13px">
             업로드한 이미지로 실제 AR 타투를 경험해보세요.
           </Description>
         </OptionBox>
         <OptionBox>
-          <ButtonStyled variant="outline">Fun AR Tattoo</ButtonStyled>
+          <ButtonStyled variant="outline" onClick={() => goto("/camera")}>Fun AR Tattoo</ButtonStyled>
           <Description size="13px">
             저희가 준비한 이미지로 AR 타투를 즐겨보세요!
           </Description>

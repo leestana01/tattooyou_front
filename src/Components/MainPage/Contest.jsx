@@ -4,7 +4,6 @@ import BackButton from '../Common/BackButton';
 import Title from '../Common/Title';
 import { useNavigate } from 'react-router-dom';
 
-// 기타 컴포넌트 스타일 정의
 const Section = styled.section`
   display: grid;
   grid-template-columns: repeat(2, 1fr);

@@ -5,6 +5,7 @@ import Login from "./Components/MainPage/Login";
 import Menus from "./Components/MainPage/Menus";
 import MyPage from "./Components/MainPage/MyPage";
 import Contest from "./Components/MainPage/Contest"
+import Camera from "./Pages/Camera"
 
 const router = createBrowserRouter([
     {
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
                 element:<Contest/>
             }
         ]
+    },
+    {
+        path: "/camera",
+        element: <Camera/>
     }
 ])
 
