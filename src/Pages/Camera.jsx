@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import Webcam from 'react-webcam';
 import styled from 'styled-components';
 import html2canvas from 'html2canvas';
+import { useNavigate } from 'react-router-dom';
 
 const Section = styled.section`
   display: flex;
@@ -77,6 +78,7 @@ export default function Component() {
   const [dragging, setDragging] = useState(false);
   const [imgPos, setImgPos] = useState({ x: 16, y: 16 });
   const webcamRef = useRef(null);
+  const navigate = useNavigate();
 
   const handleMouseDown = (e) => {
     if (e.target.tagName.toLowerCase() === 'img') {
@@ -113,10 +115,14 @@ export default function Component() {
       const canvas = await html2canvas(webcamContainer);
       const screenshotUrl = canvas.toDataURL('image/png');
 
-      //screenshotUrl을 사용하여 다음 페이지에 보여줄 수 있게 한다.
-      console.log('촬영한 사진:', screenshotUrl);
+      //촬영한 사진을 localStorage에 저장
+      localStorage.setItem('screenshotUrl', screenshotUrl);
+
+      //cameraphoto로 넘어간다
+      navigate('/cameraphoto');
     }
   };
+
 
   return (
     <Section>

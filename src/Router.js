@@ -1,11 +1,13 @@
 import React from "react";
-import { createBrowserRouter} from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import Main from "./Pages/Main";
 import Login from "./Components/MainPage/Login";
 import Menus from "./Components/MainPage/Menus";
 import MyPage from "./Components/MainPage/MyPage";
 import Contest from "./Components/MainPage/Contest"
 import Camera from "./Pages/Camera"
+import CameraPhoto from "./Components/CameraPage/CameraPhoto"
+
 
 const router = createBrowserRouter([
     {
@@ -14,25 +16,29 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "",
-                element: <Login/>
+                element: <Login />
             },
             {
                 path: "/menus",
-                element: <Menus/>
+                element: <Menus />
             },
             {
                 path: "/mypage",
-                element:<MyPage />
+                element: <MyPage />
             },
             {
                 path: "/contest",
-                element:<Contest/>
+                element: <Contest />
             }
         ]
     },
     {
         path: "/camera",
-        element: <Camera/>
+        element: <Camera />
+    },
+    {
+        path: "/cameraphoto",
+        element: <CameraPhoto />
     }
 ])
 
