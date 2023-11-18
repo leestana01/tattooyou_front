@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Webcam from 'react-webcam';
 import styled from 'styled-components';
+import html2canvas from 'html2canvas';
 
 const Section = styled.section`
   display: flex;
@@ -75,6 +76,7 @@ const StyledImg = styled.img`
 export default function Component() {
   const [dragging, setDragging] = useState(false);
   const [imgPos, setImgPos] = useState({ x: 16, y: 16 });
+  const webcamRef = useRef(null);
 
   const handleMouseDown = (e) => {
     if (e.target.tagName.toLowerCase() === 'img') {
@@ -104,14 +106,28 @@ export default function Component() {
     setDragging(false);
   };
 
+  const handleScreenshot = async () => {
+    const webcamContainer = document.getElementById('webcam-container');
+
+    if (webcamContainer) {
+      const canvas = await html2canvas(webcamContainer);
+      const screenshotUrl = canvas.toDataURL('image/png');
+
+      //screenshotUrl을 사용하여 다음 페이지에 보여줄 수 있게 한다.
+      console.log('촬영한 사진:', screenshotUrl);
+    }
+  };
+
   return (
     <Section>
       <WebcamContainer
+        id="webcam-container"
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
       >
         <Webcam
+          ref={webcamRef}
           screenshotFormat="image/jpeg"
           style={{ width: '100%', height: '100%', position: 'absolute' }}
         />
@@ -136,7 +152,7 @@ export default function Component() {
         <RotateButton variant="outline">반시계 회전</RotateButton>
         <RotateButton variant="outline">시계 회전</RotateButton>
       </ActionButtons>
-      <RoundButton variant="outline"></RoundButton>
+      <RoundButton variant="outline" onClick={handleScreenshot}></RoundButton>
     </Section>
   );
 }
