@@ -62,7 +62,6 @@ const RoundButton = styled.button`
   border-width: 4px;
 `;
 
-//카메라 위에 뜰 이미지 컴포넌트 추가함
 const StyledImg = styled.img`
   position: absolute;
   width: 96px;
@@ -78,15 +77,25 @@ export default function Component() {
   const [imgPos, setImgPos] = useState({ x: 16, y: 16 });
 
   const handleMouseDown = (e) => {
-    setDragging(true);
+    if (e.target.tagName.toLowerCase() === 'img') {
+      setDragging(true);
+    }
   };
 
   const handleMouseMove = (e) => {
     if (dragging && e.clientX && e.clientY) {
-      const boundingRect = e.target.getBoundingClientRect();
-      const newX = e.clientX - boundingRect.left - 96 / 2;
-      const newY = e.clientY - boundingRect.top - 96 / 2;
+      //boundingRect를 사용하여 현재 마우스 커서의 좌표를 WebcamContainer 엘리먼트 내부 좌표계로 변환하고, 그에 따라 이미지의 위치를 조정
+      const boundingRect = e.currentTarget.getBoundingClientRect();
+      //마우스 이벤트 객체에서, 현재 마우스 커서의 x 및 y 좌표
+      //현재 마우스 커서의 위치를 WebcamContainer 내부 좌표계로 변환한 후, 이미지의 크기에 따라 보정을 가해준다.
 
+      //마우스 커서 위치에서 이미지의 중심을 빼서 이미지의 좌표를 조정
+      const imageWidth = 96; // 이미지의 실제 너비
+      const imageHeight = 96; // 이미지의 실제 높이
+
+      const newX = e.clientX - boundingRect.left - imageWidth * 2;
+      const newY = e.clientY - boundingRect.top - imageHeight * 2;
+      //새로 계산된 이미지의 위치를 setImgPos 함수를 사용하여 업데이트 -> React는 상태가 변경되었음을 감지하고 화면을 다시 렌더링
       setImgPos({ x: newX, y: newY });
     }
   };
@@ -108,10 +117,13 @@ export default function Component() {
         />
         <StyledImg
           alt="AR Tattoo"
-          draggable="true"
+          draggable="false" //이미지 드래그 기능 비활성화(처음에는. 클릭 시에만 드래그되도록 함)
           src="/likelion.png"
           style={{ aspectRatio: '100/100', objectFit: 'cover' }}
           imgPos={imgPos}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
         />
       </WebcamContainer>
       <ScrollableImageList aria-label="Scrollable Image List">
