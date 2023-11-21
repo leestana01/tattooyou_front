@@ -71,12 +71,13 @@ const StyledImg = styled.img`
   object-fit: cover;
   border-radius: 4px;
   z-index: 1;
-  transform: translate(${({ imgPos }) => imgPos.x}px, ${({ imgPos }) => imgPos.y}px);
 `;
 
 export default function Component() {
   const [dragging, setDragging] = useState(false);
   const [imgPos, setImgPos] = useState({ x: 16, y: 16 });
+  const [imgRotation, setImgRotation] = useState(0); //StyledImg 회전을 위해
+  const [imgScale, setImgScale] = useState(1); //이미지 확대를 위해 추가
   const webcamRef = useRef(null);
   const navigate = useNavigate();
 
@@ -123,6 +124,27 @@ export default function Component() {
     }
   };
 
+  const handleRotateCounterClockwise = () => {
+    //반시계 회전 버튼 클릭 시 왼쪽으로 10도씩 기울임
+    setImgRotation(imgRotation - 10);
+  };
+
+  const handleRotateClockwise = () => {
+    //시계 회전 버튼 클릭 시 오른쪽으로 10도씩 기울임
+    setImgRotation(imgRotation + 10);
+  };
+
+  const handleZoomIn = () => {
+    //도안 확대 클릭 시 이미지가 1.2배씩 확대
+    const newScale = Math.min(imgScale * 1.2, 2.0736); //최대 4번(1.2배를 4번)까지 이미지 확대 가능
+    setImgScale(newScale);
+  };
+
+  const handleZoomOut = () => {
+    //도안 축소 클릭 시 이미지가 0.8배씩 축소
+    const newScale = Math.max(imgScale * 0.8, 0.4096);
+    setImgScale(newScale);
+  };
 
   return (
     <Section>
@@ -141,8 +163,11 @@ export default function Component() {
           alt="AR Tattoo"
           draggable="false" //이미지 드래그 기능 비활성화(처음에는. 클릭 시에만 드래그되도록 함)
           src="/likelion.png"
-          style={{ aspectRatio: '100/100', objectFit: 'cover' }}
-          imgPos={imgPos}
+          style={{
+            aspectRatio: '100/100',
+            objectFit: 'cover',
+            transform: `translate(${imgPos.x}px, ${imgPos.y}px) rotate(${imgRotation}deg) scale(${imgScale})`,
+          }}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
@@ -154,9 +179,12 @@ export default function Component() {
           <img src="/likelion.png" alt="Image 2" />
         </ImageGroup>
       </ScrollableImageList>
+
       <ActionButtons>
-        <RotateButton variant="outline">반시계 회전</RotateButton>
-        <RotateButton variant="outline">시계 회전</RotateButton>
+        <RotateButton variant="outline" onClick={handleRotateCounterClockwise}>반시계 회전</RotateButton>
+        <RotateButton variant="outline" onClick={handleRotateClockwise}>시계 회전</RotateButton>
+        <RotateButton variant="outline" onClick={handleZoomIn}>도안 확대</RotateButton>
+        <RotateButton variant="outline" onClick={handleZoomOut}>도안 축소</RotateButton>
       </ActionButtons>
       <RoundButton variant="outline" onClick={handleScreenshot}></RoundButton>
     </Section>
