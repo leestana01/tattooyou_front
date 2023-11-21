@@ -7,6 +7,7 @@ import MyPage from "./Pages/MainPage/MyPage";
 import Contest from "./Pages/MainPage/Contest";
 import TattooShop from "./Pages/MainPage/TattooShop";
 import Camera from "./Pages/Camera";
+import CameraPhoto from "./Pages/CameraPage/CameraPhoto";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
         path: "/tattoo-shop",
         element: <TattooShop />,
       },
+      {
+        path: "/cameraphoto",
+        element: <CameraPhoto />
+      }
     ],
   },
   {
