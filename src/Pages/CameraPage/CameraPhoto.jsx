@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ButtonStyled from "../../Components/Common/ButtonStyled";
 import styled from 'styled-components';
+import axios from 'axios';
 
 const Container = styled.div`
   text-align: center;
@@ -56,6 +57,10 @@ const CameraPhoto = () => {
     }, []);
 
     const handlePostClick = () => {
+        if (localStorage.getItem("user") == "guest"){
+          alert('게스트 사용자는 이용할 수 없습니다.');
+          return;
+        }
         setShowTextarea(true); //네, 게시할래요 버튼 클릭 시 Textarea 표시
     };
 
@@ -63,12 +68,48 @@ const CameraPhoto = () => {
         setTextareaContent(event.target.value);
     };
 
-    const handlePostButtonClick = () => {
+    const handlePostButtonClick = async () => {
+      if (!textareaContent.trim()) {
+        alert("제목을 입력해주세요");
+        return;
+      }
+    
+      try {
+        const base64Data = screenshotUrl.split(',')[1];
+        const byteCharacters = atob(base64Data);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const imageBlob = new Blob([byteArray], { type: 'image/png' });
+        const imageFile = new File([imageBlob], "screenshot.png", { type: 'image/png' });
+    
+        const formData = new FormData();
+        formData.append('title', textareaContent);
+        formData.append('image', imageFile);
+        formData.append('content', textareaContent);
+        formData.append('writerId', localStorage.getItem("user"));
+    
+        // axios POST 요청
+        const response = await axios.post(`${process.env.REACT_APP_SERVER}/users/posts`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+    
+        // 요청이 성공적으로 완료된 후의 작업
+        console.log(response.data);
+        alert("게시물이 성공적으로 업로드되었습니다.");
         navigate('/contest');
+      } catch (error) {
+        console.error("게시물 업로드 실패:", error);
+        alert("게시물 업로드에 실패했습니다.");
+      }
     };
 
     const handlePostButtonClick_back = () => {
-        navigate('/camera');
+        navigate('/menus');
     };
 
     return (

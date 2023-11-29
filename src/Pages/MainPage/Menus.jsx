@@ -45,6 +45,17 @@ const OptionBox = styled.div`
 export default function Component() {
   const navigate = useNavigate();
   const goto = (where) => {
+    switch (where) {
+      case "/cameraforreal":
+      case "/mypage":
+        var user = localStorage.getItem("user");
+        if (user == "guest") {
+          alert('게스트 사용자는 이용할 수 없습니다.')
+          return
+        }
+      default:
+        break;
+    }
     navigate(where);
   };
   return (
@@ -60,7 +71,7 @@ export default function Component() {
       </ImageGrid>
       <OptionsContainer>
         <OptionBox>
-          <ButtonStyled variant="outline" onClick={() => goto("/camera")}>
+          <ButtonStyled variant="outline" onClick={() => goto("/cameraforreal")}>
             Real AR Tattoo
           </ButtonStyled>
           <Description size="13px">
@@ -68,7 +79,7 @@ export default function Component() {
           </Description>
         </OptionBox>
         <OptionBox>
-          <ButtonStyled variant="outline" onClick={() => goto("/camera")}>
+          <ButtonStyled variant="outline" onClick={() => goto("/cameraforfun")}>
             Fun AR Tattoo
           </ButtonStyled>
           <Description size="13px">

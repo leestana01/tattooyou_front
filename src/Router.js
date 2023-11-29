@@ -6,7 +6,8 @@ import Menus from "./Pages/MainPage/Menus";
 import MyPage from "./Pages/MainPage/MyPage";
 import Contest from "./Pages/MainPage/Contest";
 import TattooShop from "./Pages/MainPage/TattooShop";
-import Camera from "./Pages/Camera";
+import CameraForFun from "./Pages/CameraForFun";
+import CameraForReal from "./Pages/CameraForReal";
 import CameraPhoto from "./Pages/CameraPage/CameraPhoto";
 
 const router = createBrowserRouter([
@@ -41,8 +42,12 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/camera",
-    element: <Camera />,
+    path: "/cameraforfun",
+    element: <CameraForFun />,
+  },
+  {
+    path: "/cameraForReal",
+    element: <CameraForReal />,
   },
 ]);
 

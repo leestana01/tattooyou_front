@@ -1,8 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Webcam from 'react-webcam';
 import styled from 'styled-components';
 import html2canvas from 'html2canvas';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Section = styled.section`
   display: flex;
@@ -31,11 +32,13 @@ const ScrollableImageList = styled.div`
   display: flex;
   overflow-x: scroll;
   margin-top: 32px;
+  background: gray;
 `;
 
 const ImageGroup = styled.div`
   display: flex;
   gap: 16px;
+  height: 100px;
 `;
 
 const ActionButtons = styled.div`
@@ -78,8 +81,33 @@ export default function Component() {
   const [imgPos, setImgPos] = useState({ x: 16, y: 16 });
   const [imgRotation, setImgRotation] = useState(0); //StyledImg 회전을 위해
   const [imgScale, setImgScale] = useState(1); //이미지 확대를 위해 추가
+  const [imageList, setImageList] = useState([]); // 백엔드에서 가져온 이미지 목록을 저장
+  const [styledImgSrc, setStyledImgSrc] = useState("/likelion.png");
   const webcamRef = useRef(null);
   const navigate = useNavigate();
+
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_SERVER}/users/images/3`);
+        const formattedImages = response.data.map(image => `data:image/jpeg;base64,${image}`);
+        setImageList(formattedImages);
+        if (response.data.length > 0) {
+          setStyledImgSrc(formattedImages[0]);
+        }
+      } catch (error) {
+        console.error("이미지를 불러오는 데 실패했습니다.", error);
+      }
+    };
+
+    fetchImages();
+  }, []);
+
+  // 이미지를 클릭했을 때 StyledImg의 src를 업데이트하는 함수
+  const handleImageClick = (base64Image) => {
+    setStyledImgSrc(base64Image);
+  };
 
   const handleMouseDown = (e) => {
     if (e.target.tagName.toLowerCase() === 'img') {
@@ -162,7 +190,7 @@ export default function Component() {
         <StyledImg
           alt="AR Tattoo"
           draggable="false" //이미지 드래그 기능 비활성화(처음에는. 클릭 시에만 드래그되도록 함)
-          src="/likelion.png"
+          src={styledImgSrc}
           style={{
             aspectRatio: '100/100',
             objectFit: 'cover',
@@ -174,9 +202,15 @@ export default function Component() {
         />
       </WebcamContainer>
       <ScrollableImageList aria-label="Scrollable Image List">
-        <ImageGroup>
-          <img src="/likelion.png" alt="Image 1" />
-          <img src="/likelion.png" alt="Image 2" />
+      <ImageGroup>
+          {imageList.map((image, index) => (
+            <img
+              key={index}
+              src={image}
+              alt={`Image ${index + 1}`}
+              onClick={() => handleImageClick(image)}
+            />
+          ))}
         </ImageGroup>
       </ScrollableImageList>
 
