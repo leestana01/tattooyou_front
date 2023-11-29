@@ -60,7 +60,7 @@ export default function Component() {
   };
   return (
     <CardContainer width="full" maxWidth="32rem">
-      <BackButton onClick={() => goto(-1)}>{"<"}</BackButton>
+      <BackButton onClick={() => {if(window.confirm("로그인 페이지로 이동합니다\n진행하시겠습니까?")){goto("/")}}}>{"<"}</BackButton>
       <Title>AR Tattoo</Title>
       <ImageGrid>
         <RoundImage alt="Lion Image" src="/likelion.png" />
@@ -95,7 +95,7 @@ export default function Component() {
           </Description>
         </OptionBox>
         <OptionBox>
-          <ButtonStyled variant="outline">Contact Tattoo Artist</ButtonStyled>
+          <ButtonStyled variant="outline" onClick={() => goto("/shops")}>Contact Tattoo Artist</ButtonStyled>
           <Description size="13px">근처 타투샵을 알고싶나요?</Description>
         </OptionBox>
         <OptionBox>

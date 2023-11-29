@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import ButtonStyled from "../../Components/Common/ButtonStyled";
 import InputStyled from "../../Components/Common/InputStyled";
@@ -34,52 +34,49 @@ const Form = styled.form`
 `;
 
 export default function Component() {
-  const [logindata, setLoginData] = useState({
-    username: '',
-    password: ''
+  const [registerData, setRegisterData] = useState({
+    userId: '',
+    password: '',
+    username: ''
   });
+  
+  const navigate = useNavigate();
 
   const handleChange = e => {
-    setLoginData({
-      ...logindata,
+    setRegisterData({
+      ...registerData,
       [e.target.name]: e.target.value
-    })
+    });
   }
 
   const handleSubmit = e => {
     e.preventDefault();
 
-    axios.post(`${process.env.REACT_APP_SERVER}/users/login`, logindata)
+    // POST 요청 주소를 회원가입으로 변경
+    axios.post(`${process.env.REACT_APP_SERVER}/users/register`, registerData)
     .then(response => {
-      console.log(response.data.id);
-      localStorage.setItem("user",response.data.id);
-      navigate("menus");
+      console.log('회원가입 성공:', response.data);
+      localStorage.setItem("user", response.data.id);
+      alert("회원가입이 성공적으로 완료되었습니다.");
+      navigate("/menus");
     })
     .catch(error => {
-      alert('아이디 혹은 비밀번호가 틀렸습니다.')
-    })
+      console.error('회원가입 오류:', error);
+      alert('회원가입에 실패했습니다.')
+    });
   }
 
-  const loginAsGuest = e => {
-    localStorage.setItem("user","guest");
-    navigate("menus");
-  }
-
-  const navigate = useNavigate();
-  const goto = (where) => {
-    navigate(where);
-  };
 
 
   return (
     <CardContainer>
-      <Title>AR 타투</Title>
+      <Title>회원가입</Title>
       <Form onSubmit={handleSubmit}>
         <LabelStyled htmlFor="email">이메일</LabelStyled>
         <InputStyled
           id="email"
           name="userId"
-          value={logindata.userId}
+          value={registerData.userId}
           placeholder="Likelion@example.com"
           required
           type="email"
@@ -90,24 +87,26 @@ export default function Component() {
         <InputStyled 
           id="password" 
           name="password"
-          value={logindata.password} 
-          required type="password" 
+          value={registerData.password} 
+          required 
+          type="password" 
+          onChange={handleChange}
+        />
+        <SpaceArea></SpaceArea>
+        <LabelStyled htmlFor="username">닉네임</LabelStyled>
+        <InputStyled
+          id="username"
+          name="username"
+          value={registerData.username}
+          placeholder="별명"
+          required
           onChange={handleChange}
         />
         <SpaceArea></SpaceArea>
         <ButtonStyled type="submit">
-          로그인
+          회원가입
         </ButtonStyled>
       </Form>
-      <SpaceArea></SpaceArea>
-      <Form marginBottom="20px">
-        <Text>또는 게스트로 계속하기</Text>
-        <ButtonStyled variant="outline" onClick={() => {loginAsGuest()}}>게스트 로그인</ButtonStyled>
-      </Form>
-      <div>
-        <Text>처음 방문하셨나요?</Text>
-        <ButtonStyled variant="outline" onClick={() => {goto("register")}}>회원가입</ButtonStyled>
-      </div>
     </CardContainer>
   );
 }

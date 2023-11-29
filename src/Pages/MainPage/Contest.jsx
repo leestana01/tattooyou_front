@@ -83,7 +83,7 @@ export default function Component() {
   };
   return (
     <CardContainer maxWidth="32rem">
-      <BackButton onClick={() => goto(-1)}>{"<"}</BackButton>
+      <BackButton onClick={() => goto("/menus")}>{"<"}</BackButton>
       <Title>Contest</Title>
 
       <Section>

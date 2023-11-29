@@ -93,12 +93,13 @@ export default function Component() {
         const formattedImages = response.data.map(image => `data:image/jpeg;base64,${image}`);
         setImageList(formattedImages);
         if (!(response.data.length > 0)) {
-          alert('등록된 이미지가 없습니다. \n이전 화면으로 돌아갑니다.');
-          navigate(-1);
+          throw new Error()
         }
         setStyledImgSrc(formattedImages[0]);
       } catch (error) {
-        console.error("이미지를 불러오는 데 실패했습니다.", error);
+        console.error("이미지를 불러오는 데 실패했습니다. : ", error);
+        alert('등록된 이미지가 없습니다. \n이전 화면으로 돌아갑니다.');
+        navigate(-1);
       }
     };
 
